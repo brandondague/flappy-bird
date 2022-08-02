@@ -10,13 +10,6 @@
 
 PlayState = Class{__includes = BaseState}
 
-PIPE_SPEED = 60
-PIPE_WIDTH = 70
-PIPE_HEIGHT = 288
-
-BIRD_WIDTH = 38
-BIRD_HEIGHT = 24
-
 --[[
     Called when this state is transitioned to from another state.
 ]]
@@ -38,7 +31,7 @@ function PlayState:update(dt)
 
     -- creates a new random spawn timer after a pair of pipes has spawned
     if self.spawnInterval == 0 then
-        self.spawnInterval = math.random(2, 5)
+        self.spawnInterval = math.random(1.5, 2)
     end
 
     -- spawn a new pipe pair at random intervals
@@ -46,8 +39,7 @@ function PlayState:update(dt)
         -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
         -- no higher than 10 pixels below the top edge of the screen,
         -- and no lower than a gap length (90 pixels) from the bottom
-        local y = math.max(-PIPE_HEIGHT + 10, 
-            math.min(self.lastY + math.random(-120, 120), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+        local y = randomY(self.lastY)
         self.lastY = y
         -- add a new pipe pair at the end of the screen at our new Y
         table.insert(self.pipePairs, PipePair(y))
@@ -143,4 +135,20 @@ function PlayState:exit()
     -- stop scrolling for the death/score screen
     scrolling = false
     
+end
+
+function randomY(lastY)
+    if lastY <= -PIPE_HEIGHT + 30 then
+        yRange = math.random(50, 120)
+    elseif lastY >= VIRTUAL_HEIGHT - 140 - PIPE_HEIGHT then
+        yRange = math.random(-120, -50)
+    else
+        if math.random(0, 1) == 0 then
+            yRange = math.random(-120, -50)
+        else
+            yRange = math.random(50, 120)
+        end
+    end
+
+    return math.max(-PIPE_HEIGHT + 20, math.min(lastY + yRange, VIRTUAL_HEIGHT - 130 - PIPE_HEIGHT))
 end

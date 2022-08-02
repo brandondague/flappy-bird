@@ -17,53 +17,13 @@
     as an infinitely generated obstacle course for the player.
 ]]
 
--- push is a library that will allow us to draw our game at a virtual
--- resolution, instead of however large our window is; used to provide
--- a more retro aesthetic
---
--- https://github.com/Ulydev/push
-push = require 'push'
+require 'src/Dependencies'
 
--- the "Class" library we're using will allow us to represent anything in
--- our game as code, rather than keeping track of many disparate variables and
--- methods
---
--- https://github.com/vrld/hump/blob/master/class.lua
-Class = require 'class'
+background = love.graphics.newImage('sprites/background.png')
+backgroundScroll = 0
 
--- a basic StateMachine class which will allow us to transition to and from
--- game states smoothly and avoid monolithic code in one file
-require 'StateMachine'
-
-require 'states/BaseState'
-require 'states/CountdownState'
-require 'states/PlayState'
-require 'states/ScoreState'
-require 'states/TitleScreenState'
-require 'states/PauseState'
-
-require 'Bird'
-require 'Pipe'
-require 'PipePair'
-
--- physical screen dimensions
-WINDOW_WIDTH = 1920
-WINDOW_HEIGHT = 1080
-
--- virtual resolution dimensions
-VIRTUAL_WIDTH = 512
-VIRTUAL_HEIGHT = 288
-
-local background = love.graphics.newImage('sprites/background.png')
-local backgroundScroll = 0
-
-local ground = love.graphics.newImage('sprites/ground.png')
-local groundScroll = 0
-
-local BACKGROUND_SCROLL_SPEED = 30
-local GROUND_SCROLL_SPEED = 60
-
-local BACKGROUND_LOOPING_POINT = 413
+ground = love.graphics.newImage('sprites/ground.png')
+groundScroll = 0
 
 -- global variable we can use to scroll the map
 scrolling = true
@@ -102,8 +62,8 @@ function love.load()
     }
 
     -- kick off music
-    sounds['music']:setLooping(true)
-    sounds['music']:play()
+    -- sounds['music']:setLooping(true)
+    -- sounds['music']:play()
 
     -- initialize our virtual resolution
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -182,7 +142,7 @@ function love.draw()
     love.graphics.draw(background, -backgroundScroll, 0)
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-    displayFPS()
+    -- displayFPS()
     
     push:finish()
 

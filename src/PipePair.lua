@@ -10,7 +10,7 @@
 
 PipePair = Class{}
 
-local MAX_GAP_HEIGHT = 100
+local MAX_GAP_HEIGHT = 85
 local MIN_GAP_HEIGHT = 75
 
 function PipePair:init(y)
